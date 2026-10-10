@@ -1,11 +1,16 @@
 // WordVault service worker: the site opens without internet and can be installed to the home screen.
 // This is a template: the build (serviceWorker plugin in vite.config.js) fills in the two constants
 // below with a hash and the list of built files, and writes the result to dist/sw.js.
-const VERSION = "5622f7574ff3";
-const PRECACHE = ["./assets/index-CkA4zXOh.js","./assets/index-D1hsy3aH.css","./assets/jszip.min-DC3D1EXU.js","./icons/favicon-64.png","./icons/icon-192.png","./icons/icon-512.png","./icons/maskable-512.png","./index.html","./manifest.webmanifest"];
+const VERSION = "773ca9ba1507";
+const PRECACHE = ["./assets/index-BPMMiY71.css","./assets/index-jkxa4GSL.js","./assets/jszip.min-BeAUL-2p.js","./icons/favicon-64.png","./icons/icon-192.png","./icons/icon-512.png","./icons/maskable-512.png","./index.html","./manifest.webmanifest"];
 const CACHE = `wordvault-${VERSION}`;
 
-// No skipWaiting: an open old page keeps its cached files (e.g. the lazy JSZip chunk) until it is closed
+// No skipWaiting on install: an open old page keeps its cached files (e.g. the lazy JSZip chunk) until it is closed.
+// The «↻ Обновить» button on the home screen asks for it explicitly, then reloads the page.
+self.addEventListener('message', event => {
+  if (event.data === 'skipWaiting') self.skipWaiting();
+});
+
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(PRECACHE.map(url => new Request(url, { cache: 'reload' })))),
@@ -25,7 +30,10 @@ self.addEventListener('activate', event => {
 // Other sites (GitHub API for sync) are not touched.
 self.addEventListener('fetch', event => {
   const { request } = event;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  // The version of the published site: always from the network
+  if (url.pathname.endsWith('/version.json')) return;
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).catch(() => caches.match('./index.html')));
     return;
