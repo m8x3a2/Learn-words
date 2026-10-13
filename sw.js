@@ -1,8 +1,8 @@
 // WordVault service worker: the site opens without internet and can be installed to the home screen.
 // This is a template: the build (serviceWorker plugin in vite.config.js) fills in the two constants
 // below with a hash and the list of built files, and writes the result to dist/sw.js.
-const VERSION = "031fa577c527";
-const PRECACHE = ["./assets/index-CN77rQ-l.js","./assets/index-DtUixYQk.css","./assets/jszip.min-u4EvBHLD.js","./icons/favicon-64.png","./icons/icon-192.png","./icons/icon-512.png","./icons/maskable-512.png","./index.html","./manifest.webmanifest"];
+const VERSION = "f8591c804dde";
+const PRECACHE = ["./assets/index-DR3OuQ24.js","./assets/index-zbIvLZ8d.css","./assets/jszip.min-B5jZ6U-R.js","./icons/favicon-64.png","./icons/icon-192.png","./icons/icon-512.png","./icons/maskable-512.png","./index.html","./manifest.webmanifest"];
 const CACHE = `wordvault-${VERSION}`;
 
 // No skipWaiting on install: an open old page keeps its cached files (e.g. the lazy JSZip chunk) until it is closed.
